@@ -68,10 +68,10 @@ class LoginScreen extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.all(15.0),
           child: Text(
-            'Welcome to Sncaks App',
+            'Welcome to Bdjobs Sncaks App',
             style: TextStyle(
-              fontSize: 22.0,
-              fontFamily: "assets/fonts/Ranga-Bold.ttf",
+              fontSize: 26.0,
+              fontFamily: 'Ranga',
             ),
           ),
         )
