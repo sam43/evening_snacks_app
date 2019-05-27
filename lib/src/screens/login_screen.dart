@@ -1,10 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:toast/toast.dart';
 
 import '../blocs/bloc.dart';
 import '../utils/singleton_class.dart';
 import 'landing_screen.dart';
 
+var _email = '',
+    _password = '';
 class LoginScreen extends StatelessWidget {
+
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -78,6 +83,7 @@ class LoginScreen extends StatelessWidget {
     return StreamBuilder(
       stream: bloc.updateEmail,
       builder: (context, snap) {
+        _setEmailValue(snap.data.toString());
         return TextField(
           onChanged: bloc.changeEmail,
           keyboardType: TextInputType.emailAddress,
@@ -110,6 +116,7 @@ class LoginScreen extends StatelessWidget {
     return StreamBuilder(
       stream: bloc.updatePassword,
       builder: (context, snap) {
+        _setPassValue(snap.data.toString());
         return TextField(
           onChanged: bloc.changePassword,
           decoration: InputDecoration(
@@ -147,14 +154,46 @@ class LoginScreen extends StatelessWidget {
       padding: EdgeInsets.all(10.0),
       color: Colors.green,
       onPressed: () {
-        Navigator.push(
-          cxt,
-          MaterialPageRoute(builder: (context) => MyApp()),
-        );
+        print("email value: ${_getEmailValue()}");
+        if (_getEmailValue() == 'a@c' && _getPassValue() == '1230') {
+          Navigator.push(
+            cxt,
+            MaterialPageRoute(builder: (context) => MyApp()),
+          );
+        }
+        else {
+          Toast.show("Login credentials are not correct. \nTry again", cxt,
+              duration: Toast.LENGTH_SHORT,
+              gravity: Toast.BOTTOM,
+              backgroundColor: Colors.redAccent,
+              // we can use 'Colors.green'
+              textColor: Colors.white,
+              backgroundRadius: 10.0);
+        }
+        print("pass value: ${_getPassValue()}");
       },
     );
   }
 }
+
+void _setEmailValue(String s) {
+  print("_setEmailValue value: $s");
+  _email = s;
+}
+
+String _getEmailValue() {
+  return _email;
+}
+
+void _setPassValue(String s) {
+  print("_setPassValue value: $s");
+  _password = s;
+}
+
+String _getPassValue() {
+  return _password;
+}
+
 
 @override
 Widget _appLogo() {
