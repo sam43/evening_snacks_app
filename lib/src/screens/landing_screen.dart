@@ -37,7 +37,7 @@ class _MyHomePageState extends State<MyHomePage> {
   int _currentIndex = 0;
   final List<Widget> _children = [
     OrderPage(),
-    OtherOrderPage(),
+    MyOrderPage(),
     OrderListPage(),
     OrderSummaryPage()
   ];
@@ -70,9 +70,9 @@ class _MyHomePageState extends State<MyHomePage> {
         onTabSelected: _selectedTab,
         items: [
           FABBottomAppBarItem(iconData: Icons.menu, text: 'Menu'),
-          FABBottomAppBarItem(iconData: Icons.layers, text: 'Summary'),
+          FABBottomAppBarItem(iconData: Icons.layers, text: 'My order'),
           FABBottomAppBarItem(iconData: Icons.dashboard, text: 'List'),
-          FABBottomAppBarItem(iconData: Icons.info, text: 'Info'),
+          FABBottomAppBarItem(iconData: Icons.info, text: 'Summary'),
         ],
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
