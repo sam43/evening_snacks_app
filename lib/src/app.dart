@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'screens/login_screen.dart';
+import 'screens/landing_screen.dart';
 
 class App extends StatelessWidget {
   @override
@@ -9,14 +9,15 @@ class App extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       //title: 'BLoC Demo',
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+          primarySwatch: Colors.orange,
+          accentColor: Colors.green
       ),
       home: Scaffold(
         resizeToAvoidBottomPadding: false,
         /*appBar: AppBar(
           title: Text('BLoC Login'),
         ),*/
-        body: LoginScreen(),
+        body: MyApp(),
       ),
     );
   }

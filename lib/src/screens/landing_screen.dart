@@ -1,17 +1,22 @@
-import 'package:evening_snacks_app/src/screens/other_screens.dart';
 import 'package:evening_snacks_app/src/widgets/anchor_layout.dart';
 import 'package:evening_snacks_app/src/widgets/fab_bottom_appbar.dart';
 import 'package:evening_snacks_app/src/widgets/fab_with_icons.dart';
 import 'package:flutter/material.dart';
-import 'package:toast/toast.dart';
+
+import 'order.dart';
+import 'orderList.dart';
+import 'orderSummary.dart';
+import 'otherOrder.dart';
 
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'Snacks',
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        primarySwatch: Colors.orange,
+        accentColor: Colors.green,
       ),
       home: MyHomePage(title: 'Flutter Demo Home Page'),
     );
@@ -29,10 +34,19 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   String _lastSelected = 'TAB: 0';
+  int _currentIndex = 0;
+  final List<Widget> _children = [
+    OrderPage(),
+    OtherOrderPage(),
+    OrderListPage(),
+    OrderSummaryPage()
+  ];
+
 
   void _selectedTab(int index) {
     setState(() {
       _lastSelected = 'TAB: $index';
+      _currentIndex = index;
     });
   }
 
@@ -51,7 +65,7 @@ class _MyHomePageState extends State<MyHomePage> {
       bottomNavigationBar: FABBottomAppBar(
         centerItemText: 'Order',
         color: Colors.grey,
-        selectedColor: Colors.blue,
+        selectedColor: Colors.orange,
         notchedShape: CircularNotchedRectangle(),
         onTabSelected: _selectedTab,
         items: [
@@ -64,7 +78,45 @@ class _MyHomePageState extends State<MyHomePage> {
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       floatingActionButton: _buildFab(context),
       // This trailing comma makes auto-formatting nicer for build methods.
-      body: Center(
+      body: _children[_currentIndex],
+    );
+  }
+
+  Widget _buildFab(BuildContext context) {
+    final icons = [Icons.supervised_user_circle, Icons.perm_contact_calendar];
+    return AnchoredOverlay(
+      showOverlay: true,
+      overlayBuilder: (context, offset) {
+        return CenterAbout(
+          position: Offset(offset.dx, offset.dy - icons.length * 35.0),
+          child: FabWithIcons(
+            icons: icons,
+            onIconTapped: _selectedFab,
+          ),
+        );
+      },
+      child: FloatingActionButton(
+        onPressed: () {},
+        tooltip: 'Add your new order',
+        child: Icon(Icons.add),
+        elevation: 3.0,
+      ),
+    );
+  }
+}
+/*
+* Toast.show("Toast plugin app", context,
+                    duration: Toast.LENGTH_SHORT,
+                    gravity: Toast.BOTTOM,
+                    backgroundColor: Color(0xFFB74093),
+                    // we can use 'Colors.green'
+                    textColor: Colors.yellow,
+                    backgroundRadius: 5.0);
+
+                    */
+
+/*
+* Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
@@ -80,14 +132,6 @@ class _MyHomePageState extends State<MyHomePage> {
               child: Text('Go to Second Screen'),
               onPressed: () {
                 //Use`Navigator` widget to push the second screen to out stack of screens
-
-                Toast.show("Toast plugin app", context,
-                    duration: Toast.LENGTH_SHORT,
-                    gravity: Toast.BOTTOM,
-                    backgroundColor: Color(0xFFB74093),
-                    // we can use 'Colors.green'
-                    textColor: Colors.yellow,
-                    backgroundRadius: 5.0);
                 Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => SecondScreen()),
@@ -97,28 +141,4 @@ class _MyHomePageState extends State<MyHomePage> {
           ],
         ),
       ),
-    );
-  }
-
-  Widget _buildFab(BuildContext context) {
-    final icons = [Icons.sms, Icons.mail, Icons.phone];
-    return AnchoredOverlay(
-      showOverlay: true,
-      overlayBuilder: (context, offset) {
-        return CenterAbout(
-          position: Offset(offset.dx, offset.dy - icons.length * 35.0),
-          child: FabWithIcons(
-            icons: icons,
-            onIconTapped: _selectedFab,
-          ),
-        );
-      },
-      child: FloatingActionButton(
-        onPressed: () {},
-        tooltip: 'Increment',
-        child: Icon(Icons.add),
-        elevation: 2.0,
-      ),
-    );
-  }
-}
+* */

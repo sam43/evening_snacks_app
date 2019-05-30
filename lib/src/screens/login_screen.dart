@@ -119,6 +119,7 @@ class LoginScreen extends StatelessWidget {
         _setPassValue(snap.data.toString());
         return TextField(
           onChanged: bloc.changePassword,
+          obscureText: true,
           decoration: InputDecoration(
             hintText: 'password',
             labelText: 'Password',
@@ -156,7 +157,7 @@ class LoginScreen extends StatelessWidget {
       onPressed: () {
         print("email value: ${_getEmailValue()}");
         if (_getEmailValue() == 'a@c' && _getPassValue() == '1230') {
-          Navigator.push(
+          Navigator.pushReplacement(
             cxt,
             MaterialPageRoute(builder: (context) => MyApp()),
           );
