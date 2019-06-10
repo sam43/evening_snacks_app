@@ -8,11 +8,13 @@ import 'landing_screen.dart';
 var _email = '',
     _password = '';
 class LoginScreen extends StatelessWidget {
-
-
   @override
   Widget build(BuildContext context) {
     return Container(
+      padding: EdgeInsets.only(bottom: MediaQuery
+          .of(context)
+          .viewInsets
+          .bottom),
       margin: EdgeInsets.all(20.0),
       child: ListView(
         shrinkWrap: true,
@@ -31,33 +33,6 @@ class LoginScreen extends StatelessWidget {
       ),
     );
   }
-
-  /*
-  * Container(
-        margin: EdgeInsets.all(20.0),
-        child: Column(
-          children: <Widget>[
-            _loginTitle(),
-            MySingleton.putMargin(all: 15.0),
-            _emailTextField(),
-            MySingleton.putMargin(all: 15.0),
-            _passwordField(),
-            MySingleton.putMargin(top: 50.0),
-            //_keepLoogedIn(),
-            _submitLogin(),
-          ],
-        ),
-      )*/
-
-  // inside scrollview
-  /*
-  * return SingleChildScrollView(
-      child: ConstrainedBox(
-        constraints: BoxConstraints(),
-        child: ...,
-      ),
-    );
-  * */
 
   Widget _loginTitle() {
     return Column(
@@ -155,6 +130,7 @@ class LoginScreen extends StatelessWidget {
       padding: EdgeInsets.all(10.0),
       color: Colors.green,
       onPressed: () {
+        FocusScope.of(cxt).requestFocus(FocusNode());
         print("email value: ${_getEmailValue()}");
         if (_getEmailValue() == 'a@c' && _getPassValue() == '1230') {
           Navigator.pushReplacement(

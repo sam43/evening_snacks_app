@@ -2,6 +2,7 @@ import 'package:evening_snacks_app/src/widgets/anchor_layout.dart';
 import 'package:evening_snacks_app/src/widgets/fab_bottom_appbar.dart';
 import 'package:evening_snacks_app/src/widgets/fab_with_icons.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import 'order.dart';
 import 'orderList.dart';
@@ -11,6 +12,10 @@ import 'otherOrder.dart';
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+      statusBarColor: Colors.orange, //top bar color
+      statusBarIconBrightness: Brightness.light, //top bar icons
+    ));
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Snacks',
@@ -42,7 +47,6 @@ class _MyHomePageState extends State<MyHomePage> {
     OrderSummaryPage()
   ];
 
-
   void _selectedTab(int index) {
     setState(() {
       _lastSelected = 'TAB: $index';
@@ -58,9 +62,20 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
+    const RoundedRectangleBorder roundedRectangleBorder =
+    RoundedRectangleBorder(
+        borderRadius: BorderRadius.only(
+            bottomLeft: Radius.elliptical(80.0, 10.0),
+            bottomRight: Radius.elliptical(80.0, 10.0)),
+        side: BorderSide(style: BorderStyle.none));
     return Scaffold(
       appBar: AppBar(
-        title: Text("Snacks App"),
+        title: Text(
+          "Snacks App",
+          style: TextStyle(color: Colors.white),
+        ),
+        centerTitle: true,
+        shape: roundedRectangleBorder,
       ),
       bottomNavigationBar: FABBottomAppBar(
         centerItemText: 'Order',
