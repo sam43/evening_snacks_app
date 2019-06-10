@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:toast/toast.dart';
 
 import '../blocs/bloc.dart';
@@ -133,6 +134,7 @@ class LoginScreen extends StatelessWidget {
         FocusScope.of(cxt).requestFocus(FocusNode());
         print("email value: ${_getEmailValue()}");
         if (_getEmailValue() == 'a@c' && _getPassValue() == '1230') {
+          _loginSuccess(true);
           Navigator.pushReplacement(
             cxt,
             MaterialPageRoute(builder: (context) => MyApp()),
@@ -153,6 +155,11 @@ class LoginScreen extends StatelessWidget {
   }
 }
 
+void _loginSuccess(bool ok) async {
+  final prefs = await SharedPreferences.getInstance();
+  prefs.setBool('logged_in', ok);
+}
+
 void _setEmailValue(String s) {
   print("_setEmailValue value: $s");
   _email = s;
@@ -171,8 +178,6 @@ String _getPassValue() {
   return _password;
 }
 
-
-@override
 Widget _appLogo() {
   return Container(
     height: 100,
@@ -180,3 +185,4 @@ Widget _appLogo() {
     child: Image.asset("assets/humm.png"),
   );
 }
+

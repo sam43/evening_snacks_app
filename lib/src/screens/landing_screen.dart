@@ -3,7 +3,10 @@ import 'package:evening_snacks_app/src/widgets/fab_bottom_appbar.dart';
 import 'package:evening_snacks_app/src/widgets/fab_with_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:toast/toast.dart';
 
+import '../app.dart';
 import 'order.dart';
 import 'orderList.dart';
 import 'orderSummary.dart';
@@ -51,6 +54,10 @@ class _MyHomePageState extends State<MyHomePage> {
     setState(() {
       _lastSelected = 'TAB: $index';
       _currentIndex = index;
+      if (index == 3) {
+        Toast.show('log out', context);
+        _logout(context);
+      }
     });
   }
 
@@ -78,7 +85,6 @@ class _MyHomePageState extends State<MyHomePage> {
         shape: roundedRectangleBorder,
       ),
       bottomNavigationBar: FABBottomAppBar(
-        centerItemText: 'Order',
         color: Colors.grey,
         selectedColor: Colors.orange,
         notchedShape: CircularNotchedRectangle(),
@@ -119,6 +125,20 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 }
+
+void _logout(BuildContext context) async {
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  prefs.remove('logged_in');
+  _loginSuccess(false);
+  Navigator.pushReplacement(context,
+      MaterialPageRoute(builder: (BuildContext ctx) => App()));
+}
+
+void _loginSuccess(bool ok) async {
+  final prefs = await SharedPreferences.getInstance();
+  prefs.setBool('logged_in', ok);
+}
+
 /*
 * Toast.show("Toast plugin app", context,
                     duration: Toast.LENGTH_SHORT,
