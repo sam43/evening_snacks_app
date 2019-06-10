@@ -5,7 +5,7 @@ class OrderListPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        color: Colors.blueGrey,
+        color: Colors.white,
       ),
     );
   }

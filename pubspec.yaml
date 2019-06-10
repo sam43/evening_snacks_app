@@ -45,6 +45,9 @@ flutter:
         - asset: fonts/Ranga-Bold.ttf
         - asset: fonts/Ranga-Regular.ttf
           weight: 700
+    - family: customIcon
+      fonts:
+        - asset: fonts/customIcon.ttf
 
   # To add assets to your application, add an assets section, like this:
   # assets:

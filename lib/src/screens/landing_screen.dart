@@ -21,7 +21,6 @@ class MyApp extends StatelessWidget {
     ));
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Snacks',
       theme: ThemeData(
         primarySwatch: Colors.orange,
         accentColor: Colors.green,
@@ -33,7 +32,6 @@ class MyApp extends StatelessWidget {
 
 class MyHomePage extends StatefulWidget {
   MyHomePage({Key key, this.title}) : super(key: key);
-
   final String title;
 
   @override
@@ -54,10 +52,6 @@ class _MyHomePageState extends State<MyHomePage> {
     setState(() {
       _lastSelected = 'TAB: $index';
       _currentIndex = index;
-      if (index == 3) {
-        Toast.show('log out', context);
-        _logout(context);
-      }
     });
   }
 
@@ -81,6 +75,16 @@ class _MyHomePageState extends State<MyHomePage> {
           "Snacks App",
           style: TextStyle(color: Colors.white),
         ),
+        actions: <Widget>[
+          IconButton(
+            icon: Icon(IconData(0xe900, fontFamily: 'customIcon')),
+            padding: EdgeInsets.only(right: 25.0),
+            onPressed: () {
+              Toast.show('logged out', context);
+              _logout(context);
+            },
+          ),
+        ],
         centerTitle: true,
         shape: roundedRectangleBorder,
       ),

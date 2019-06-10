@@ -5,7 +5,7 @@ class OrderSummaryPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        color: Colors.deepOrange,
+        color: Colors.white,
       ),
     );
   }
