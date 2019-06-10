@@ -24,6 +24,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.orange,
         accentColor: Colors.green,
+        fontFamily: 'Raleway',
       ),
       home: MyHomePage(title: 'Flutter Demo Home Page'),
     );
@@ -73,7 +74,9 @@ class _MyHomePageState extends State<MyHomePage> {
       appBar: AppBar(
         title: Text(
           "Snacks App",
-          style: TextStyle(color: Colors.white),
+          style: TextStyle(color: Colors.white,
+              fontFamily: 'Raleway',
+              fontWeight: FontWeight.bold),
         ),
         actions: <Widget>[
           IconButton(
