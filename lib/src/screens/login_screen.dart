@@ -12,12 +12,13 @@ class LoginScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      color: Colors.white,
       padding: EdgeInsets.only(bottom: MediaQuery
           .of(context)
           .viewInsets
           .bottom),
-      margin: EdgeInsets.all(20.0),
       child: ListView(
+        padding: EdgeInsets.all(20.0),
         shrinkWrap: true,
         scrollDirection: Axis.vertical,
         physics: ScrollPhysics(),
@@ -38,16 +39,17 @@ class LoginScreen extends StatelessWidget {
   Widget _loginTitle() {
     return Column(
       children: <Widget>[
-        MySingleton.putMargin(top: 20.0),
+        MySingleton.putMargin(top: 50.0),
         _appLogo(),
-        MySingleton.putMargin(bottom: 20.0),
+        MySingleton.putMargin(bottom: 10.0),
         Padding(
           padding: const EdgeInsets.all(15.0),
           child: Text(
-            'Welcome to Bdjobs Sncaks App',
+            'Bdjobs Snacks App',
             style: TextStyle(
-              fontSize: 26.0,
-              fontFamily: 'Ranga',
+              fontSize: 24.0,
+              fontFamily: 'Raleway',
+              fontWeight: FontWeight.bold,
             ),
           ),
         )
@@ -126,7 +128,7 @@ class LoginScreen extends StatelessWidget {
     return RaisedButton(
       child: Text(
         'Log in',
-        style: TextStyle(color: Colors.white),
+        style: TextStyle(color: Colors.white, fontFamily: 'Raleway',),
       ),
       padding: EdgeInsets.all(10.0),
       color: Colors.green,

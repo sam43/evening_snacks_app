@@ -45,7 +45,7 @@ class _MyHomePageState extends State<MyHomePage> {
   final List<Widget> _children = [
     OrderPage(),
     MyOrderPage(),
-    OrderListPage(),
+    OrdersListPage(),
     OrderSummaryPage()
   ];
 
@@ -137,6 +137,7 @@ void _logout(BuildContext context) async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
   prefs.remove('logged_in');
   _loginSuccess(false);
+  Navigator.pop(context);
   Navigator.pushReplacement(context,
       MaterialPageRoute(builder: (BuildContext ctx) => App()));
 }

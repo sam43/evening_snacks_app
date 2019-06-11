@@ -79,7 +79,8 @@ class FABBottomAppBarState extends State<FABBottomAppBar> {
             SizedBox(height: widget.iconSize),
             Text(
               widget.centerItemText ?? '',
-              style: TextStyle(color: widget.color),
+              style: TextStyle(color: widget.color,
+                fontFamily: 'Raleway',),
             ),
           ],
         ),
@@ -107,7 +108,8 @@ class FABBottomAppBarState extends State<FABBottomAppBar> {
                 Icon(item.iconData, color: color, size: widget.iconSize),
                 Text(
                   item.text,
-                  style: TextStyle(color: color),
+                  style: TextStyle(color: color,
+                    fontFamily: 'Raleway',),
                 )
               ],
             ),
