@@ -34,22 +34,33 @@ class _MyOrderPageState extends State<MyOrderPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(10.0),
-      child: Column(
-        children: <Widget>[
-          MySingleton.putMargin(top: 10.0),
-          _staticText(_rules, Colors.orange),
-          MySingleton.putMargin(bottom: 20.0),
-          _listWidget(context),
-          MySingleton.putMargin(top: 20.0),
-          _submitButton(context, 'Order', Colors.green),
-          MySingleton.putMargin(bottom: 30.0),
-          _staticText(_rulesUpdate, Colors.redAccent),
-          MySingleton.putMargin(bottom: 15.0),
-          _submitButton(context, 'Delete Order', Colors.redAccent),
-        ],
-      ),
+    return Scaffold(
+      body: LayoutBuilder(
+          builder: (BuildContext context, BoxConstraints viewportConstraints) {
+            return Container(
+              child: SingleChildScrollView(
+                child: ConstrainedBox(
+                  constraints: BoxConstraints(
+                      minHeight: viewportConstraints.maxHeight),
+                  child: Column(
+                    children: <Widget>[
+                      MySingleton.putMargin(top: 10.0),
+                      _staticText(_rules, Colors.orange),
+                      MySingleton.putMargin(bottom: 20.0),
+                      _listWidget(context),
+                      MySingleton.putMargin(top: 20.0),
+                      _submitButton(context, 'Order', Colors.green),
+                      MySingleton.putMargin(bottom: 30.0),
+                      _staticText(_rulesUpdate, Colors.redAccent),
+                      MySingleton.putMargin(bottom: 15.0),
+                      _submitButton(context, 'Delete Order', Colors.redAccent),
+                      MySingleton.putMargin(bottom: 30.0),
+                    ],
+                  ),
+                ),
+              ),
+            );
+          }),
     );
   }
 
