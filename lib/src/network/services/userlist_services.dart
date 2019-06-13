@@ -19,12 +19,10 @@ Product _parseJsonForCrossword(String jsonString) {
 }
 */
 
-Future /*<List<User>>*/ loadProduct() async {
-  var jsonProduct = await get(C.baseURL + C.userList);
-  final jsonResponse = json.decode(jsonProduct.body);
-  UserListModel product = UserListModel.fromJson(jsonResponse);
+Future <List<User>> getUsers() async {
+  var data = await get(C.baseURL + C.userList);
   List<User> users = [];
-  users = jsonResponse['users'];
-  print('product: ${jsonResponse['users']} // ${users[3]}');
-  //return users;
+  var jsonData = UserListModel.fromJson(json.decode(data.body));
+  users = jsonData.user.toList();
+  return users;
 }

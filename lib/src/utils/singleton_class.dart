@@ -47,4 +47,8 @@ class MySingleton {
       margin: EdgeInsets.all(all),
     );*/
   }
+
+  static void showSnackBar(BuildContext context, String text) {
+    Scaffold.of(context).showSnackBar(SnackBar(content: Text(text)));
+  }
 }

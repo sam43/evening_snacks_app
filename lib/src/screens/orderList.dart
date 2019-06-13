@@ -1,12 +1,12 @@
 import 'dart:convert';
 
-import 'package:evening_snacks_app/src/network/models/models.dart';
-import 'package:evening_snacks_app/src/utils/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
-import "package:http/http.dart" show get, post;
+import "package:http/http.dart" show get;
 import 'package:toast/toast.dart';
 
+import '../network/models/models.dart';
+import '../utils/constants.dart';
 import '../utils/hex_color_convert.dart';
 import '../utils/singleton_class.dart';
 
@@ -18,6 +18,7 @@ class OrdersListPage extends StatefulWidget {
 class _OrdersPageState extends State<OrdersListPage> {
   final titles = ['bike', 'boat', 'bus', 'car',
     'railway', 'run', 'subway', 'transit', 'walk'];
+  List<User> users = [];
 
   @override
   Widget build(BuildContext context) {
@@ -40,74 +41,15 @@ class _OrdersPageState extends State<OrdersListPage> {
     );
   }
 
-  Widget _demoListItem(BuildContext context, int position, String item) {
-    const RoundedRectangleBorder roundedRectangleBorder =
-    RoundedRectangleBorder(
-        borderRadius: BorderRadius.only(
-            bottomLeft: Radius.circular(25.0),
-            bottomRight: Radius.circular(25.0)),
-        side: BorderSide(style: BorderStyle.none));
 
-    return Slidable(
-      actionPane: SlidableDrawerActionPane(),
-      actionExtentRatio: 0.25,
-      child: Card(
-        margin: EdgeInsets.all(5.0),
-        elevation: 2.2,
-        child: Container(
-          padding: EdgeInsets.only(top: 10.0, bottom: 10.0),
-          color: HexColor('#59ECF0F1'),
-          child: ListTile(
-            leading: CircleAvatar(
-              backgroundColor: Colors.indigoAccent,
-              child: Text('${position + 1}'),
-              foregroundColor: Colors.white,
-            ),
-            title: Text('Tile no $item'),
-            subtitle: Text('Item name $item'),
-          ),
-        ),
-      ),
-      actions: <Widget>[
-        IconSlideAction(
-          caption: 'Archive',
-          color: Colors.blue,
-          icon: Icons.archive,
-          onTap: () => _showSnackBar(context, 'Archive'),
-        ),
-        IconSlideAction(
-          caption: 'Share',
-          color: Colors.indigo,
-          icon: Icons.share,
-          onTap: () => _showSnackBar(context, 'Share'),
-        ),
-      ],
-      secondaryActions: <Widget>[
-        IconSlideAction(
-          caption: 'More',
-          color: Colors.black45,
-          icon: Icons.more_horiz,
-          onTap: () => _showSnackBar(context, 'More'),
-        ),
-        IconSlideAction(
-          caption: 'Delete',
-          color: Colors.red,
-          icon: Icons.delete,
-          onTap: () {
-            setState(() {
-              titles.remove(titles[position]);
-              Toast.show(
-                  'position is $position and length: ${titles.length}', context,
-                  duration: 5);
-            });
-          },
-        ),
-      ],
-    );
-  }
-
-  void _showSnackBar(BuildContext context, String text) {
-    Scaffold.of(context).showSnackBar(SnackBar(content: Text(text)));
+  Future <List<User>> _getUsers() async {
+    if (users.length == 0) {
+      var data = await get(C.baseURL + C.userList);
+      users = [];
+      var jsonData = UserListModel.fromJson(json.decode(data.body));
+      users = jsonData.user.toList();
+    }
+    return users;
   }
 
   Widget _generateList(BuildContext context) {
@@ -122,58 +64,25 @@ class _OrdersPageState extends State<OrdersListPage> {
           );
         } else {
           return ListView.builder(
-              itemCount: snap.data,
-              itemBuilder: (BuildContext context, index) {
-                if (index == snap.data - 1) {
-                  print('data: ${snap.data[index].uname}');
+              itemCount: snap.data.length,
+              itemBuilder: (context, index) {
+                if (index == snap.data.length - 1) {
                   return Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
                       //_demoListItem(context, index, snap.data[index]),
-                      _userListItem(context, index, snap.data),
+                      _userListItem(context, index, snap.data[index]),
                       MySingleton.putMargin(bottom: 30.0)
                     ],
                   );
                 } else
                   //return _demoListItem(context, index, snap.data[index]);
-                  return _userListItem(context, index, snap.data);
+                  return _userListItem(context, index, snap.data[index]);
               }
           );
         }
       },
     );
-  }
-
-  Future<List<User>> _getUsers() async {
-    var data = await get(C.baseURL + C.userList);
-    List<User> users = [];
-    var jsonData = UserListModel.fromJson(json.decode(data.body));
-    //var jsonData = json.decode(data.body);
-    /*print('users: ${jsonData.user}');
-    print('usersType: ${jsonData.user.runtimeType}');
-    print('json: $jsonData');*/
-
-    print('start');
-    users = jsonData.user.toList();
-    print('userlistaa: ${users.runtimeType}');
-    print('end');
-
-    for (var u in users) {
-      User user = User(u.uname, u.gid, u.messageType);
-      users.add(user);
-    }
-    print('length of array: ${users.length}');
-    return users;
-  }
-
-  void _test() async {
-    var data = await get(C.baseURL + C.userList);
-    //var jsonData = UserListModel.fromJson(json.decode(data.body));
-    var jsonData = json.decode(data.body);
-    print('json: $jsonData');
-    List<UserListModel> users = [];
-    users = jsonData['users'] as List;
-    print(users.runtimeType);
   }
 
   Widget _userListItem(BuildContext context, int i, User data) {
@@ -203,13 +112,13 @@ class _OrdersPageState extends State<OrdersListPage> {
           caption: 'Archive',
           color: Colors.blue,
           icon: Icons.archive,
-          onTap: () => _showSnackBar(context, 'Archive'),
+          onTap: () => MySingleton.showSnackBar(context, 'Archive'),
         ),
         IconSlideAction(
           caption: 'Share',
           color: Colors.indigo,
           icon: Icons.share,
-          onTap: () => _showSnackBar(context, 'Share'),
+          onTap: () => MySingleton.showSnackBar(context, 'Share'),
         ),
       ],
       secondaryActions: <Widget>[
@@ -217,15 +126,16 @@ class _OrdersPageState extends State<OrdersListPage> {
           caption: 'More',
           color: Colors.black45,
           icon: Icons.more_horiz,
-          onTap: () => _showSnackBar(context, 'More'),
+          onTap: () => MySingleton.showSnackBar(context, 'More'),
         ),
         IconSlideAction(
           caption: 'Delete',
           color: Colors.red,
           icon: Icons.delete,
+          closeOnTap: true,
           onTap: () {
             setState(() {
-              titles.remove(data);
+              users.removeAt(i);
               Toast.show(
                   'Data ${data.uname} has been deleted.', context,
                   duration: 5);
@@ -235,5 +145,13 @@ class _OrdersPageState extends State<OrdersListPage> {
       ],
     );
   }
+
+  void _removeItem(int index) {
+    setState(() {
+      users = List.from(users)
+        ..removeAt(index);
+    });
+  }
 }
+
 
