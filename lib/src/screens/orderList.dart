@@ -1,8 +1,10 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import "package:http/http.dart" show get;
+import 'package:image_picker/image_picker.dart';
 import 'package:toast/toast.dart';
 
 import '../network/models/models.dart';
@@ -19,6 +21,14 @@ class _OrdersPageState extends State<OrdersListPage> {
   final titles = ['bike', 'boat', 'bus', 'car',
     'railway', 'run', 'subway', 'transit', 'walk'];
   List<User> users = [];
+
+  //image upload
+  Future<File> file;
+  String status = '';
+  String base64Image;
+  File tmpFile;
+  String errMessage = 'Error Uploading Image';
+
 
   @override
   Widget build(BuildContext context) {
@@ -126,7 +136,7 @@ class _OrdersPageState extends State<OrdersListPage> {
           caption: 'More',
           color: Colors.black45,
           icon: Icons.more_horiz,
-          onTap: () => MySingleton.showSnackBar(context, 'More'),
+          onTap: () => _chooseImage,
         ),
         IconSlideAction(
           caption: 'Delete',
@@ -144,6 +154,12 @@ class _OrdersPageState extends State<OrdersListPage> {
         ),
       ],
     );
+  }
+
+  _chooseImage() {
+    setState(() {
+      file = ImagePicker.pickImage(source: ImageSource.gallery);
+    });
   }
 
   void _removeItem(int index) {

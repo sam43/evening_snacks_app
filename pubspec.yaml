@@ -28,6 +28,7 @@ dependencies:
   flutter_slidable: ^0.5.3
   random_string: ^0.0.2
   http: ^0.12.0+1
+  image_picker: ^0.4.10
 
 dev_dependencies:
   flutter_test:
