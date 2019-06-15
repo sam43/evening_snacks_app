@@ -4,7 +4,6 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import "package:http/http.dart" show get;
-import 'package:image_picker/image_picker.dart';
 import 'package:toast/toast.dart';
 
 import '../network/models/models.dart';
@@ -136,36 +135,25 @@ class _OrdersPageState extends State<OrdersListPage> {
           caption: 'More',
           color: Colors.black45,
           icon: Icons.more_horiz,
-          onTap: () => _chooseImage,
+          onTap: () => MySingleton.showSnackBar(context, 'More options'),
         ),
         IconSlideAction(
           caption: 'Delete',
           color: Colors.red,
           icon: Icons.delete,
           closeOnTap: true,
-          onTap: () {
-            setState(() {
-              users.removeAt(i);
-              Toast.show(
-                  'Data ${data.uname} has been deleted.', context,
-                  duration: 5);
-            });
-          },
+          onTap: () => _removeItem(i, data),
         ),
       ],
     );
   }
 
-  _chooseImage() {
+  void _removeItem(int index, User data) {
     setState(() {
-      file = ImagePicker.pickImage(source: ImageSource.gallery);
-    });
-  }
-
-  void _removeItem(int index) {
-    setState(() {
-      users = List.from(users)
-        ..removeAt(index);
+      users.removeAt(index);
+      Toast.show(
+          'Data ${data.uname} has been deleted.', context,
+          duration: 5);
     });
   }
 }
