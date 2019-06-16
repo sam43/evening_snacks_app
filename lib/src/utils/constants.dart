@@ -1,6 +1,12 @@
 class C {
   static String baseURL = 'http://172.16.9.235/snacks';
   static String userList = '/getuserlist.asp';
+  static String orderList = '/viewsnacks.asp';
+  static String getMenu = '/getmenu.asp';
+  static String orderToday = '/viewtodayorder.asp';
+  static String orderSnacks = '/ordersnacks.asp';
+  static String deleteOrder = '/deleteorder.asp';
+  static String somethingWrong = 'Something went wrong. Try again';
 }
 
 

@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
@@ -19,15 +18,10 @@ class OrdersListPage extends StatefulWidget {
 class _OrdersPageState extends State<OrdersListPage> {
   final titles = ['bike', 'boat', 'bus', 'car',
     'railway', 'run', 'subway', 'transit', 'walk'];
-  List<User> users = [];
-
-  //image upload
-  Future<File> file;
-  String status = '';
-  String base64Image;
-  File tmpFile;
-  String errMessage = 'Error Uploading Image';
-
+  List<Order> orders = [];
+  String uID = '',
+      messageType = '',
+      uName = '';
 
   @override
   Widget build(BuildContext context) {
@@ -51,14 +45,14 @@ class _OrdersPageState extends State<OrdersListPage> {
   }
 
 
-  Future <List<User>> _getUsers() async {
-    if (users.length == 0) {
-      var data = await get(C.baseURL + C.userList);
-      users = [];
-      var jsonData = UserListModel.fromJson(json.decode(data.body));
-      users = jsonData.user.toList();
+  Future <List<Order>> _getUsers() async {
+    if (orders.length == 0) {
+      var data = await get(C.baseURL + C.orderList);
+      orders = [];
+      var jsonData = OrderListModel.fromJson(json.decode(data.body));
+      orders = jsonData.order.toList();
     }
-    return users;
+    return orders;
   }
 
   Widget _generateList(BuildContext context) {
@@ -94,7 +88,7 @@ class _OrdersPageState extends State<OrdersListPage> {
     );
   }
 
-  Widget _userListItem(BuildContext context, int i, User data) {
+  Widget _userListItem(BuildContext context, int i, Order data) {
     print('data: ${data.uname}');
     return Slidable(
       actionPane: SlidableDrawerActionPane(),
@@ -108,21 +102,15 @@ class _OrdersPageState extends State<OrdersListPage> {
           child: ListTile(
             leading: CircleAvatar(
               backgroundColor: Colors.indigoAccent,
-              child: Text('A'),
+              child: Text(data.uname.substring(0, 1)),
               foregroundColor: Colors.white,
             ),
             title: Text('${data.uname}'),
-            subtitle: Text('Gid: ${data.gid}'),
+            subtitle: Text('Ordered By: ${data.orderedby}'),
           ),
         ),
       ),
       actions: <Widget>[
-        IconSlideAction(
-          caption: 'Archive',
-          color: Colors.blue,
-          icon: Icons.archive,
-          onTap: () => MySingleton.showSnackBar(context, 'Archive'),
-        ),
         IconSlideAction(
           caption: 'Share',
           color: Colors.indigo,
@@ -130,13 +118,14 @@ class _OrdersPageState extends State<OrdersListPage> {
           onTap: () => MySingleton.showSnackBar(context, 'Share'),
         ),
       ],
-      secondaryActions: <Widget>[
+      /*secondaryActions: <Widget>[
         IconSlideAction(
           caption: 'More',
           color: Colors.black45,
           icon: Icons.more_horiz,
           onTap: () => MySingleton.showSnackBar(context, 'More options'),
-        ),
+        ),*/
+      secondaryActions: <Widget>[
         IconSlideAction(
           caption: 'Delete',
           color: Colors.red,
@@ -148,12 +137,28 @@ class _OrdersPageState extends State<OrdersListPage> {
     );
   }
 
-  void _removeItem(int index, User data) {
-    setState(() {
-      users.removeAt(index);
+  Future <String> _deleteOrder() async {
+    var data = await get(C.baseURL + C.deleteOrder + '?userid=$uID');
+    var jsonData = DeleteOrder.fromJson(json.decode(data.body));
+    messageType = jsonData.messageType;
+    if (messageType == '1') {
       Toast.show(
-          'Data ${data.uname} has been deleted.', context,
+          'Order $uName has been deleted.', context,
           duration: 5);
+    } else {
+      Toast.show(
+          C.somethingWrong, context,
+          duration: 5);
+    }
+    return messageType;
+  }
+
+  void _removeItem(int index, Order data) async {
+    setState(() {
+      uID = data.userid;
+      uName = data.uname;
+      orders.removeAt(index);
+      _deleteOrder();
     });
   }
 }
