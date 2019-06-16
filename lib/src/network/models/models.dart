@@ -85,3 +85,34 @@ class MenuOrder {
     alternateMenu = jsonResponse['AlternateMenu'];
   }
 }
+
+// User login
+class UserLogin {
+  List<Login> user;
+
+  UserLogin({this.user});
+
+  factory UserLogin.fromJson(Map<String, dynamic> parsedJson) {
+    var list = parsedJson['login'] as List;
+    print(list.runtimeType);
+    List<Login> usersList = list.map((i) => Login.fromJson(i)).toList();
+
+    return UserLogin(user: usersList);
+  }
+}
+
+class Login {
+  String uname;
+  String gid;
+  String email;
+  String messageType;
+
+  Login(this.uname, this.gid, this.email, this.messageType);
+
+  Login.fromJson(Map<String, dynamic> jsonResponse) {
+    uname = jsonResponse['uname'];
+    gid = jsonResponse['gid'];
+    email = jsonResponse['Email'];
+    messageType = jsonResponse['messageType'];
+  }
+}

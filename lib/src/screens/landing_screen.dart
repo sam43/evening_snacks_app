@@ -51,7 +51,6 @@ class _MyHomePageState extends State<MyHomePage> {
 
   void _selectedTab(int index) {
     setState(() {
-      _lastSelected = 'TAB: $index';
       _currentIndex = index;
     });
   }
@@ -146,42 +145,3 @@ void _loginSuccess(bool ok) async {
   final prefs = await SharedPreferences.getInstance();
   prefs.setBool('logged_in', ok);
 }
-
-/*
-* Toast.show("Toast plugin app", context,
-                    duration: Toast.LENGTH_SHORT,
-                    gravity: Toast.BOTTOM,
-                    backgroundColor: Color(0xFFB74093),
-                    // we can use 'Colors.green'
-                    textColor: Colors.yellow,
-                    backgroundRadius: 5.0);
-
-                    */
-
-/*
-* Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Text(
-              _lastSelected,
-              style: TextStyle(fontSize: 32.0),
-            ),
-            SizedBox(
-              height: 50,
-            ),
-            RaisedButton(
-              color: Colors.red,
-              child: Text('Go to Second Screen'),
-              onPressed: () {
-                //Use`Navigator` widget to push the second screen to out stack of screens
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => SecondScreen()),
-                );
-              },
-            ),
-          ],
-        ),
-      ),
-* */

@@ -106,7 +106,8 @@ class _OrdersPageState extends State<OrdersListPage> {
               foregroundColor: Colors.white,
             ),
             title: Text('${data.uname}'),
-            subtitle: Text('Ordered By: ${data.orderedby}'),
+            subtitle: Text(
+                'Menu: ${data.menu} \nOrdered By: ${data.orderedby}'),
           ),
         ),
       ),
