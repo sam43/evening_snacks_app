@@ -1,3 +1,4 @@
+import 'package:evening_snacks_app/src/network/models/user_login_response.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:toast/toast.dart';
@@ -7,7 +8,8 @@ import '../utils/singleton_class.dart';
 import 'landing_screen.dart';
 
 var _email = '',
-    _password = '';
+    _password = '',
+    _msgType = '';
 class LoginScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -122,8 +124,6 @@ class LoginScreen extends StatelessWidget {
     );
   }
 
-  Widget _keepLoogedIn() {}
-
   Widget _submitLogin(BuildContext cxt) {
     return RaisedButton(
       child: Text(
@@ -134,8 +134,12 @@ class LoginScreen extends StatelessWidget {
       color: Colors.green,
       onPressed: () {
         FocusScope.of(cxt).requestFocus(FocusNode());
+        bloc.loginUser(_getEmailValue(), _getPassValue());
+        var s = bloc.subject.stream.value;
+        print('listen: $s');
+        //_gettingStream();
         print("email value: ${_getEmailValue()}");
-        if (_getEmailValue() == 'a@c' && _getPassValue() == '1230') {
+        if (_msgType == '1') {
           _loginSuccess(true);
           Navigator.pushReplacement(
             cxt,
@@ -152,6 +156,19 @@ class LoginScreen extends StatelessWidget {
               backgroundRadius: 10.0);
         }
         print("pass value: ${_getPassValue()}");
+      },
+    );
+  }
+
+  StreamBuilder<UserResponse> _gettingStream() {
+    return StreamBuilder(
+      stream: bloc.subject.stream,
+      builder: (context, snap) {
+        if (snap.data != null) {
+          UserResponse u = snap.data;
+          _msgType = u.user[0].messageType;
+          print('login Data: ${u.user[0].messageType} and ${u.user[0].email}');
+        }
       },
     );
   }
