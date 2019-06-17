@@ -1,9 +1,4 @@
-import 'dart:convert';
-
-import 'package:evening_snacks_app/src/network/models/models.dart';
-import 'package:evening_snacks_app/src/utils/constants.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:toast/toast.dart';
 
@@ -12,11 +7,7 @@ import '../utils/singleton_class.dart';
 import 'landing_screen.dart';
 
 var _email = '',
-    _password = '',
-    _userID = '',
-    _name = '',
-    _gid = '';
-List<Login> login;
+    _password = '';
 class LoginScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -70,6 +61,7 @@ class LoginScreen extends StatelessWidget {
     return StreamBuilder(
       stream: bloc.updateEmail,
       builder: (context, snap) {
+        _setEmailValue(snap.data.toString());
         return TextField(
           onChanged: bloc.changeEmail,
           keyboardType: TextInputType.emailAddress,
@@ -130,66 +122,40 @@ class LoginScreen extends StatelessWidget {
     );
   }
 
+  Widget _keepLoogedIn() {}
+
   Widget _submitLogin(BuildContext cxt) {
-    return FutureBuilder(
-      future: _tryLogin(),
-      builder: (cxt, AsyncSnapshot snap) {
-        if (snap.data != null) {
-          return RaisedButton(
-            child: Text(
-              'Log in',
-              style: TextStyle(color: Colors.white, fontFamily: 'Raleway',),
-            ),
-            padding: EdgeInsets.all(10.0),
-            color: Colors.green,
-            onPressed: () {
-              Login log = snap.data[0];
-              FocusScope.of(cxt).requestFocus(FocusNode());
-              _callAPI(cxt, log);
-            },
-          );
-        } else {
-          return Container(
-            child: Center(child: Text(
-              'Loading...', style: TextStyle(fontSize: 20.0),
-              textAlign: TextAlign.center,)),
+    return RaisedButton(
+      child: Text(
+        'Log in',
+        style: TextStyle(color: Colors.white, fontFamily: 'Raleway',),
+      ),
+      padding: EdgeInsets.all(10.0),
+      color: Colors.green,
+      onPressed: () {
+        FocusScope.of(cxt).requestFocus(FocusNode());
+        print("email value: ${_getEmailValue()}");
+        if (_getEmailValue() == 'a@c' && _getPassValue() == '1230') {
+          _loginSuccess(true);
+          Navigator.pushReplacement(
+            cxt,
+            MaterialPageRoute(builder: (context) => MyApp()),
           );
         }
+        else {
+          Toast.show("Login credentials are not correct. \nTry again", cxt,
+              duration: Toast.LENGTH_SHORT,
+              gravity: Toast.BOTTOM,
+              backgroundColor: Colors.redAccent,
+              // we can use 'Colors.green'
+              textColor: Colors.white,
+              backgroundRadius: 10.0);
+        }
+        print("pass value: ${_getPassValue()}");
       },
     );
   }
-
-  void _callAPI(BuildContext cxt, Login data) {
-    if (data.messageType == '1' && data != null) {
-      _loginSuccess(true);
-      _setEmailValue(data.email);
-      _setNameValue(data.uname);
-      _setGIDValue(data.gid);
-      Navigator.pushReplacement(
-        cxt,
-        MaterialPageRoute(builder: (context) => MyApp()),
-      );
-    }
-    else {
-      Toast.show("Login credentials are not correct. \nTry again", cxt,
-          duration: Toast.LENGTH_SHORT,
-          gravity: Toast.BOTTOM,
-          backgroundColor: Colors.redAccent,
-          // we can use 'Colors.green'
-          textColor: Colors.white,
-          backgroundRadius: 10.0);
-    }
-  }
 }
-
-Future <List<Login>> _tryLogin() async {
-  var data = await get(C.baseURL + C.orderList);
-  login = [];
-  var jsonData = UserLogin.fromJson(json.decode(data.body));
-  login = jsonData.user.toList();
-  return login;
-}
-
 
 void _loginSuccess(bool ok) async {
   final prefs = await SharedPreferences.getInstance();
@@ -201,35 +167,8 @@ void _setEmailValue(String s) {
   _email = s;
 }
 
-String getEmailValue() {
+String _getEmailValue() {
   return _email;
-}
-
-
-void _setNameValue(String s) {
-  _name = s;
-}
-
-String getNameValue() {
-  return _name;
-}
-
-
-void _setUserIDValue(String s) {
-  _userID = s;
-}
-
-String getUserIDValue() {
-  return _userID;
-}
-
-
-void _setGIDValue(String s) {
-  _gid = s;
-}
-
-String getGIDValue() {
-  return _gid;
 }
 
 void _setPassValue(String s) {
