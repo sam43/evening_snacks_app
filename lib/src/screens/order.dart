@@ -4,6 +4,7 @@ import 'package:evening_snacks_app/src/network/models/models.dart';
 import 'package:evening_snacks_app/src/utils/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../utils/singleton_class.dart';
 import '../utils/view_seperator.dart';
@@ -17,10 +18,14 @@ class OrderPage extends StatefulWidget {
 
 class _OrderPageState extends State<OrderPage> {
   String _mainMenu = '',
-      _altMenu = '';
+      _altMenu = '',
+      _name = '',
+      _email = '',
+      _gid = '';
 
   @override
   Widget build(BuildContext context) {
+    _getInfo();
     return Scaffold(
       body: FutureBuilder(
         future: _getMenu(),
@@ -55,20 +60,26 @@ class _OrderPageState extends State<OrderPage> {
                               child: CircleAvatar(
                                 backgroundColor: Colors.orangeAccent,
                                 child: Text(
-                                  'J', style: TextStyle(fontSize: 80.0),),
+                                  _name.substring(0, 1),
+                                  style: TextStyle(fontSize: 80.0),),
                                 foregroundColor: Colors.white,
                               ),
                             ),
                             MySingleton.putMargin(top: 10.0),
                             Text(
-                              "John Doe",
+                              _name,
                               textScaleFactor: 1.6,
+                              style: TextStyle(fontWeight: FontWeight.bold),
+                            ),
+                            Text(
+                              _email,
+                              textScaleFactor: 1.2,
                               style: TextStyle(fontWeight: FontWeight.bold),
                             ),
                             MySingleton.putMargin(top: 30.0),
                             Text(
                               "** Today's Menu **",
-                              textScaleFactor: 1.4,
+                              textScaleFactor: 1.3,
                               style: TextStyle(fontWeight: FontWeight.bold),
                             ),
                             MySingleton.putMargin(top: 6.0),
@@ -108,5 +119,13 @@ class _OrderPageState extends State<OrderPage> {
     var data = await get(C.baseURL + C.getMenu);
     var jsonData = MenuOrder.fromJson(json.decode(data.body));
     return jsonData;
+  }
+
+  Future <void> _getInfo() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    _name = prefs.getString('user_name');
+    _gid = prefs.getString('user_id');
+    _email = prefs.getString('user_email');
+    print('name; $_name & ${_name.runtimeType}, email: $_email');
   }
 }

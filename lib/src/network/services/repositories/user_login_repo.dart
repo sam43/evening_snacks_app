@@ -5,6 +5,6 @@ class UserRepository {
   UserLoginProvider _apiProvider = UserLoginProvider();
 
   Future<UserResponse> loginUser(String email, String pass) {
-    return _apiProvider.loginUser(email, pass);
+    return _apiProvider.login_User(email, pass);
   }
 }

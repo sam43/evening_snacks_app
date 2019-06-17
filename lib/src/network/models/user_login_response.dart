@@ -19,8 +19,8 @@ class User {
   User(this.uname, this.gid, this.email, this.messageType);
 
   User.fromJson(Map<String, dynamic> json)
-      : uname = json["uname"],
+      : uname = json["user_name"],
         gid = json["gid"],
-        email = json["email"],
+        email = json["Email"],
         messageType = json["messageType"];
 }

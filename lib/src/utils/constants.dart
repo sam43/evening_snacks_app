@@ -1,6 +1,6 @@
 class C {
   static String baseURL = 'http://172.16.9.235/snacks';
-  static String userLogin = '/SnacksLogin.asp/';
+  static String userLogin = '/SnacksLogin.asp';
   static String userList = '/getuserlist.asp';
   static String orderList = '/viewsnacks.asp';
   static String getMenu = '/getmenu.asp';
