@@ -3,12 +3,11 @@ import 'dart:async';
 import 'package:evening_snacks_app/src/network/models/user_login_response.dart';
 import 'package:evening_snacks_app/src/network/services/repositories/user_login_repo.dart';
 import 'package:evening_snacks_app/src/screens/landing_screen.dart';
+import 'package:evening_snacks_app/src/utils/validator.dart';
 import 'package:flutter/material.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:toast/toast.dart';
-
-import 'validator.dart';
 
 class Bloc with Validator {
   final _email = StreamController<String>.broadcast();

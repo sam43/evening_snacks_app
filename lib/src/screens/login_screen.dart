@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
-import '../blocs/bloc.dart';
+import '../blocs/login_bloc.dart';
 import '../utils/singleton_class.dart';
 import 'landing_screen.dart';
 
 var _email = '',
-    _password = '',
-    _msgType = '';
+    _password = '';
 class LoginScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -154,11 +152,6 @@ class LoginScreen extends StatelessWidget {
       },
     );
   }
-}
-
-void _loginSuccess(bool ok) async {
-  final prefs = await SharedPreferences.getInstance();
-  prefs.setBool('logged_in', ok);
 }
 
 void _setEmailValue(String s) {

@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:dio/dio.dart';
+import 'package:evening_snacks_app/src/network/models/models.dart';
 import 'package:evening_snacks_app/src/network/models/user_login_response.dart';
 import 'package:evening_snacks_app/src/utils/constants.dart';
 
@@ -14,7 +15,7 @@ class UserLoginProvider {
     _setupLoggingInterceptor();
   }
 
-  Future<UserResponse> login_User(String email, String pass) async {
+  Future<UserResponse> userLogin(String email, String pass) async {
     try {
       Response response = await _dio.post(
         C.baseURL + C.userLogin,
@@ -33,6 +34,39 @@ class UserLoginProvider {
       return UserResponse.withError(_handleError(error));
     }
   }
+
+  Future<MyOrder> checkOrder(String _gid) async {
+    try {
+      print('userID1: $_gid');
+      Response response = await _dio.get(
+          C.baseURL + C.orderToday + '?userid=$_gid');
+      print('resp: ${response.data}, params: $_gid');
+      return MyOrder.fromJson(response.data);
+    } catch (error, stacktrace) {
+      print("Exception occured: $error stackTrace: $stacktrace");
+      return MyOrder.withError(_handleError(error));
+    }
+  }
+
+  /*Future<UserResponse> makeOrder(String gid, String uname, String menu, String corder) async {
+    try {
+      Response response = await _dio.post(
+        C.baseURL + C.userLogin,
+        data: {"un": email, "up": pass},
+        options: Options(
+          contentType: ContentType.parse("application/x-www-form-urlencoded"),
+          headers: {
+            HttpHeaders.contentTypeHeader: 'application/x-www-form-urlencoded'
+          },
+        ),
+      );
+      print('resp: ${response.data}, params: $email and $pass');
+      return UserResponse.fromJson(response.data);
+    } catch (error, stacktrace) {
+      print("Exception occured: $error stackTrace: $stacktrace");
+      return UserResponse.withError(_handleError(error));
+    }
+  }*/
 
   String _handleError(Error error) {
     String errorDescription = "";

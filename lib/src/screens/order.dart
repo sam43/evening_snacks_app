@@ -20,8 +20,7 @@ class _OrderPageState extends State<OrderPage> {
   String _mainMenu = '',
       _altMenu = '',
       _name = '',
-      _email = '',
-      _gid = '';
+      _email = '';
 
   @override
   Widget build(BuildContext context) {
@@ -74,13 +73,15 @@ class _OrderPageState extends State<OrderPage> {
                             Text(
                               _email,
                               textScaleFactor: 1.2,
-                              style: TextStyle(fontWeight: FontWeight.bold),
+                              style: TextStyle(fontWeight: FontWeight.bold,
+                                  color: Colors.blueGrey),
                             ),
                             MySingleton.putMargin(top: 30.0),
                             Text(
                               "** Today's Menu **",
                               textScaleFactor: 1.3,
-                              style: TextStyle(fontWeight: FontWeight.bold),
+                              style: TextStyle(fontWeight: FontWeight.bold,
+                                  color: Colors.orange),
                             ),
                             MySingleton.putMargin(top: 6.0),
                             MySeparator(color: Colors.grey),
@@ -124,7 +125,7 @@ class _OrderPageState extends State<OrderPage> {
   Future <void> _getInfo() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     _name = prefs.getString('user_name');
-    _gid = prefs.getString('user_id');
+    //_gid = prefs.getString('user_id');
     _email = prefs.getString('user_email');
     print('name; $_name & ${_name.runtimeType}, email: $_email');
   }

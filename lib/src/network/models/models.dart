@@ -6,7 +6,7 @@ class UserListModel {
 
   factory UserListModel.fromJson(Map<String, dynamic> parsedJson) {
     var list = parsedJson['users'] as List;
-    print(list.runtimeType);
+    //print(list.runtimeType);
     List<User> usersList = list.map((i) => User.fromJson(i)).toList();
 
     return UserListModel(user: usersList);
@@ -35,7 +35,7 @@ class OrderListModel {
 
   factory OrderListModel.fromJson(Map<String, dynamic> parsedJson) {
     var list = parsedJson['orders'] as List;
-    print(list.runtimeType);
+    //print(list.runtimeType);
     List<Order> usersList = list.map((i) => Order.fromJson(i)).toList();
 
     return OrderListModel(order: usersList);
@@ -86,6 +86,24 @@ class MenuOrder {
   }
 }
 
+
+// user order
+
+class MyOrder {
+  String messageType;
+  String menu;
+
+  MyOrder(this.messageType, {this.menu});
+
+  MyOrder.fromJson(Map<String, dynamic> jsonResponse) {
+    messageType = jsonResponse['messageType'];
+    menu = jsonResponse['menu'];
+  }
+
+  MyOrder.withError(String errorValue) : menu = '';
+}
+
+
 // User login
 class UserLogin {
   List<Login> user;
@@ -94,7 +112,7 @@ class UserLogin {
 
   factory UserLogin.fromJson(Map<String, dynamic> parsedJson) {
     var list = parsedJson['login'] as List;
-    print(list.runtimeType);
+    //print(list.runtimeType);
     List<Login> usersList = list.map((i) => Login.fromJson(i)).toList();
 
     return UserLogin(user: usersList);

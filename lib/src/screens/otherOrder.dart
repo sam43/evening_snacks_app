@@ -1,7 +1,9 @@
 import 'dart:convert';
 
+import 'package:evening_snacks_app/src/blocs/order_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:toast/toast.dart';
 
 import '../network/models/models.dart';
@@ -12,6 +14,10 @@ class MyOrderPage extends StatefulWidget {
   _MyOrderPageState createState() => _MyOrderPageState();
 }
 
+
+String _uID = '',
+    _uName = '';
+
 class _MyOrderPageState extends State<MyOrderPage> {
   //AnimationController _controller;
   List<String> _listAsync = [];
@@ -20,18 +26,15 @@ class _MyOrderPageState extends State<MyOrderPage> {
   bool visibilityDelete = true;
   bool visibilityOrder = false;
   MenuOrder model;
-  String uID = '',
-      messageType = '',
-      uName = '';
   String _itemName = 'Aam';
   String _rules = 'To give an order please select a menu and press order button. \nNote that you can not give order after 5:00 PM';
   String _rulesUpdate = 'To update your order please delete your order first. \nNote that you can\'t delete your order after 5:00 PM';
-  /* @override
+
+  @override
   void initState() {
-    _controller = AnimationController(vsync: this);
+    _getInfo();
     super.initState();
   }
-*/
   @override
   void dispose() {
     //_controller.dispose();
@@ -50,7 +53,6 @@ class _MyOrderPageState extends State<MyOrderPage> {
                   model = snapshot.data;
                   String altMenu = model.alternateMenu;
                   _listAsync = altMenu.split('/').toList();
-                  print('list: $altMenu');
                   return Container(
                     child: SingleChildScrollView(
                       child: ConstrainedBox(
@@ -61,10 +63,11 @@ class _MyOrderPageState extends State<MyOrderPage> {
                             MySingleton.putMargin(top: 10.0),
                             _staticText(_rules, Colors.orange),
                             MySingleton.putMargin(bottom: 20.0),
-                            visibilityOrder ? _text() : _listWidget(context),
+                            orderBloc.isMenuNull() ? _text() : _listWidget(
+                                context),
                             MySingleton.putMargin(top: 20.0),
-                            visibilityOrder ? _submitButton(
-                                context, 'Order', Colors.blue)
+                            orderBloc.isMenuNull() ? _submitButton(
+                                context, 'Order', Colors.grey)
                                 : _submitButton(context, 'Order', Colors.green),
                             MySingleton.putMargin(bottom: 30.0),
                             _staticText(_rulesUpdate, Colors.redAccent),
@@ -91,7 +94,7 @@ class _MyOrderPageState extends State<MyOrderPage> {
   }
 
   Widget _listWidget(BuildContext cxt) {
-    print('list: $_listAsync');
+    //print('list: $_listAsync');
     return Container(
       child: Wrap(
         direction: Axis.vertical,
@@ -116,30 +119,16 @@ class _MyOrderPageState extends State<MyOrderPage> {
 
 
   Widget _getItemList(int index) {
-    print('list: ${_listAsync[2]}');
     return Text(_listAsync[index]);
   }
 
   void _setItemName(int s) {
-    print('item: ${_listAsync[2]}');
     _itemName = _listAsync[s];
   }
 
   String _getItemName() {
     return _itemName;
   }
-
-  void _changed(bool visibility, String field) {
-    setState(() {
-      if (field == "delete") {
-        visibilityDelete = visibility;
-      }
-      if (field == "order") {
-        visibilityOrder = visibility;
-      }
-    });
-  }
-
 }
 
 Widget _text() {
@@ -149,7 +138,6 @@ Widget _text() {
 Future <MenuOrder> _getMenu() async {
   var data = await get(C.baseURL + C.getMenu);
   var jsonData = MenuOrder.fromJson(json.decode(data.body));
-  print('${jsonData.alternateMenu}');
 
   return jsonData;
 }
@@ -180,12 +168,20 @@ void _orderSubmit(bool b) {
   return;
 }
 
-Future <MenuOrder> _orderSnacks() async {
+/*Future <MenuOrder> _orderSnacks() async {
   var data = await get(C.baseURL + C.getMenu);
   var jsonData = MenuOrder.fromJson(json.decode(data.body));
   print('${jsonData.alternateMenu}');
 
   return jsonData;
+}*/
+
+Future <void> _getInfo() async {
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  _uName = prefs.getString('user_name');
+  _uID = prefs.getString('user_id');
+  print('name:::: $_uName & ${_uName.runtimeType}, uID: $_uID');
+  orderBloc.checkOrder(_uID.toString());
 }
 
 /*Future <String> _deleteOrder() async {
