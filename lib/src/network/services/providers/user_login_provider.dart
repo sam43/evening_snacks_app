@@ -6,10 +6,10 @@ import 'package:evening_snacks_app/src/network/models/models.dart';
 import 'package:evening_snacks_app/src/network/models/user_login_response.dart';
 import 'package:evening_snacks_app/src/utils/constants.dart';
 
-class UserLoginProvider {
+class ApiProvider {
   Dio _dio = Dio();
 
-  UserLoginProvider() {
+  ApiProvider() {
     Options options = Options(receiveTimeout: 5000, connectTimeout: 5000);
     _dio = Dio(options);
     _setupLoggingInterceptor();
@@ -47,26 +47,6 @@ class UserLoginProvider {
       return MyOrder.withError(_handleError(error));
     }
   }
-
-  /*Future<UserResponse> makeOrder(String gid, String uname, String menu, String corder) async {
-    try {
-      Response response = await _dio.post(
-        C.baseURL + C.userLogin,
-        data: {"un": email, "up": pass},
-        options: Options(
-          contentType: ContentType.parse("application/x-www-form-urlencoded"),
-          headers: {
-            HttpHeaders.contentTypeHeader: 'application/x-www-form-urlencoded'
-          },
-        ),
-      );
-      print('resp: ${response.data}, params: $email and $pass');
-      return UserResponse.fromJson(response.data);
-    } catch (error, stacktrace) {
-      print("Exception occured: $error stackTrace: $stacktrace");
-      return UserResponse.withError(_handleError(error));
-    }
-  }*/
 
   String _handleError(Error error) {
     String errorDescription = "";

@@ -3,7 +3,7 @@ import 'package:evening_snacks_app/src/network/services/repositories/user_login_
 
 class OrderBloc {
   String _msgType = '', _menu = '';
-  final UserRepository _repository = UserRepository();
+  final DataRepository _repository = DataRepository();
 
   checkOrder(String _gid) async {
     print('userID3: $_gid');

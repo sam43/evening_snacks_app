@@ -16,16 +16,14 @@ class OrdersListPage extends StatefulWidget {
 }
 
 class _OrdersPageState extends State<OrdersListPage> {
-  final titles = ['bike', 'boat', 'bus', 'car',
-    'railway', 'run', 'subway', 'transit', 'walk'];
   List<Order> orders = [];
   String uID = '',
       messageType = '',
-      uName = '';
+      uName = 'XXX';
+  int _orderListLength = 0;
 
   @override
   Widget build(BuildContext context) {
-    //_test();
     return Scaffold(
       body: Container(
         color: Colors.white,
@@ -37,15 +35,17 @@ class _OrdersPageState extends State<OrdersListPage> {
               style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18.0),
             ),
             MySingleton.putMargin(top: 10.0),
-            Expanded(child: _generateList(context)),
+            Expanded(
+              child: _generateList(context),
+            ),
           ],
         ),
       ),
     );
   }
 
-
-  Future <List<Order>> _getUsers() async {
+  Future<List<Order>> _getAllOrders() async {
+    print('_getAllOrders() has called');
     if (orders.length == 0) {
       var data = await get(C.baseURL + C.orderList);
       orders = [];
@@ -57,15 +57,31 @@ class _OrdersPageState extends State<OrdersListPage> {
 
   Widget _generateList(BuildContext context) {
     return FutureBuilder(
-      future: _getUsers(),
+      future: _getAllOrders(),
       builder: (context, AsyncSnapshot snap) {
         if (snap.data == null) {
           return Container(
-            child: Center(child: Text(
-              'Loading...', style: TextStyle(fontSize: 20.0),
-              textAlign: TextAlign.center,)),
+            child: Center(
+                child: Text(
+                  'Loading...',
+                  style: TextStyle(fontSize: 20.0),
+                  textAlign: TextAlign.center,
+                )),
           );
-        } else {
+        }
+        /* else if (_orderListLength == 999) {
+          return Container(
+            child: Text(
+              'No order has been placed yet.',
+              style: TextStyle(
+                color: Colors.redAccent,
+                fontSize: 18.0,
+                fontWeight: FontWeight.normal,
+              ),
+            ),
+          );
+        }*/
+        else {
           return ListView.builder(
               itemCount: snap.data.length,
               itemBuilder: (context, index) {
@@ -81,15 +97,33 @@ class _OrdersPageState extends State<OrdersListPage> {
                 } else
                   //return _demoListItem(context, index, snap.data[index]);
                   return _userListItem(context, index, snap.data[index]);
-              }
-          );
+              });
         }
       },
     );
   }
 
   Widget _userListItem(BuildContext context, int i, Order data) {
-    print('data: ${data.uname}');
+    String menu = '',
+        orderedBy = '';
+    if (data != null) {
+      print('data: ${data.uname}');
+      uName = data.uname;
+      menu = data.menu;
+      orderedBy = data.orderedby;
+    }
+    /*else {
+      return Container(
+        child: Text(
+          'No order has been placed yet.',
+          style: TextStyle(
+            color: Colors.redAccent,
+            fontSize: 18.0,
+            fontWeight: FontWeight.normal,
+          ),
+        ),
+      );
+    }*/
     return Slidable(
       actionPane: SlidableDrawerActionPane(),
       actionExtentRatio: 0.25,
@@ -102,12 +136,11 @@ class _OrdersPageState extends State<OrdersListPage> {
           child: ListTile(
             leading: CircleAvatar(
               backgroundColor: Colors.indigoAccent,
-              child: Text(data.uname.substring(0, 1)),
+              child: Text(_getFirstLetter(uName)),
               foregroundColor: Colors.white,
             ),
-            title: Text('${data.uname}'),
-            subtitle: Text(
-                'Menu: ${data.menu} \nOrdered By: ${data.orderedby}'),
+            title: Text('$uName'),
+            subtitle: Text('Menu: $menu \nOrdered By: $orderedBy'),
           ),
         ),
       ),
@@ -138,18 +171,16 @@ class _OrdersPageState extends State<OrdersListPage> {
     );
   }
 
-  Future <String> _deleteOrder() async {
+  Future<String> _deleteOrder() async {
     var data = await get(C.baseURL + C.deleteOrder + '?userid=$uID');
     var jsonData = DeleteOrder.fromJson(json.decode(data.body));
     messageType = jsonData.messageType;
     if (messageType == '1') {
-      Toast.show(
-          'Order $uName has been deleted.', context,
-          duration: 5);
+      Toast.show('Order $uName has been deleted.', context, duration: 5);
+      print('length of order: ${orders.length}');
     } else {
-      Toast.show(
-          C.somethingWrong, context,
-          duration: 5);
+      Toast.show(C.somethingWrong, context, duration: 5);
+      print('length of order: ${orders.length}');
     }
     return messageType;
   }
@@ -157,11 +188,22 @@ class _OrdersPageState extends State<OrdersListPage> {
   void _removeItem(int index, Order data) async {
     setState(() {
       uID = data.userid;
-      uName = data.uname;
+      //uName = data.uname;
       orders.removeAt(index);
       _deleteOrder();
     });
   }
+
+  String _getFirstLetter(String uName) {
+    String fl = 'A';
+    if (uName != null || uName != '') {
+      try {
+        fl = uName.substring(0, 1);
+      } catch (e) {
+        print('Exception found : $e');
+      }
+    } else
+      fl = 'XXX';
+    return fl;
+  }
 }
-
-

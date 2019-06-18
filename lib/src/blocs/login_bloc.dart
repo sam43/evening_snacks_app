@@ -12,7 +12,7 @@ import 'package:toast/toast.dart';
 class Bloc with Validator {
   final _email = StreamController<String>.broadcast();
   final _password = StreamController<String>.broadcast();
-  final UserRepository _repository = UserRepository();
+  final DataRepository _repository = DataRepository();
   final BehaviorSubject<UserResponse> _subject = BehaviorSubject<
       UserResponse>();
 
