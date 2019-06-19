@@ -16,7 +16,8 @@ class MyOrderPage extends StatefulWidget {
 
 
 String _uID = '',
-    _uName = '';
+    _uName = '',
+    _menu = '';
 
 class _MyOrderPageState extends State<MyOrderPage> {
   //AnimationController _controller;
@@ -127,6 +128,7 @@ class _MyOrderPageState extends State<MyOrderPage> {
   }
 
   String _getItemName() {
+    _menu = _itemName;
     return _itemName;
   }
 }
@@ -138,7 +140,6 @@ Widget _text() {
 Future <MenuOrder> _getMenu() async {
   var data = await get(C.baseURL + C.getMenu);
   var jsonData = MenuOrder.fromJson(json.decode(data.body));
-
   return jsonData;
 }
 
@@ -159,7 +160,9 @@ Widget _submitButton(BuildContext cxt, String title, Color c) {
     padding: EdgeInsets.all(10.0),
     color: c,
     onPressed: () {
+      print('Order pressed');
       _orderSubmit(true);
+      orderBloc.makeOrder(_uID, _uName, _menu, corder: 'Kamrul');
     },
   );
 }

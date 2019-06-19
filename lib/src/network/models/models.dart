@@ -103,6 +103,20 @@ class MyOrder {
   MyOrder.withError(String errorValue) : menu = '';
 }
 
+// make order
+
+class MakeOrder {
+  String messageType;
+
+  MakeOrder(this.messageType);
+
+  MakeOrder.fromJson(Map<String, dynamic> jsonResponse) {
+    messageType = jsonResponse['messageType'];
+  }
+
+  MakeOrder.withError(String errorValue) : messageType = '';
+}
+
 
 // User login
 class UserLogin {

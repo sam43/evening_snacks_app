@@ -13,4 +13,10 @@ class DataRepository {
     print('userID2: $_gid');
     return _apiProvider.checkOrder(_gid);
   }
+
+  Future<MakeOrder> makeUserOrder(String userid, String uname, String menu,
+      {String corder}) {
+    print('userIDmake2: $userid// $uname// $menu //$corder');
+    return _apiProvider.makeOrder(userid, uname, menu, corder: corder);
+  }
 }

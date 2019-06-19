@@ -14,6 +14,14 @@ class OrderBloc {
     print('msgtype: $_msgType and menu: $_menu');
   }
 
+  makeOrder(String userid, String uname, String menu, {String corder}) async {
+    print('userIDmake3: $userid// $uname// $menu //$corder');
+    MakeOrder response = await _repository.makeUserOrder(
+        userid, uname, menu, corder: corder);
+    _msgType = response.messageType;
+    print('msgtypemakeOrder: $_msgType');
+  }
+
   bool isMenuNull() {
     if (_menu == null) {
       return false;

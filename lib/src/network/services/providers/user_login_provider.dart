@@ -48,6 +48,26 @@ class ApiProvider {
     }
   }
 
+  Future<MakeOrder> makeOrder(String userid, String uname, String menu,
+      {String corder}) async {
+    String _coOrder;
+    if (corder == null) {
+      _coOrder = '';
+    } else
+      _coOrder = corder;
+    try {
+      print('userIDmake: $userid');
+      Response response = await _dio.get(
+          C.baseURL + C.orderSnacks +
+              '?userid=$userid&uname=$uname&menu=$menu&corder=$_coOrder');
+      print('resp: ${response.data}, params: $userid');
+      return MakeOrder.fromJson(response.data);
+    } catch (error, stacktrace) {
+      print("Exception occured: $error stackTrace: $stacktrace");
+      return MakeOrder.withError(_handleError(error));
+    }
+  }
+
   String _handleError(Error error) {
     String errorDescription = "";
     if (error is DioError) {
